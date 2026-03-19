@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block title %}Participants{% endblock %}
+{% block body %}
+<h1>Participants</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Écurie</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for participant in participants %}
+        <tr>
+            <td>
+                {% if participant.ecurie %}
+                {{ participant.ecurie.nomEcurie }}
+                {% else %}
+                Aucune écurie
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ path('app_participant_show', {'id': participant.id}) }}">show</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_granted('ROLE_ADMIN') %}
+<a class="btn-create" href="{{ path('app_participant_new') }}">+ New Participant</a>
+{% endif %}
+{% endblock %}

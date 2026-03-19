@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% block title %}Ecuries{% endblock %}
+{% block body %}
+<h1>Ecuries</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom de l'écurie</th>
+            <th>Logo</th>
+            <th>Nombre de titre de l'écurie</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ecurie in ecuries %}
+        <tr>
+            <td>{{ ecurie.id }}</td>
+            <td>{{ ecurie.nomEcurie }}</td>
+            <td>
+                {% if ecurie.logo %}
+                <img class="logo-cadrage" src="{{ asset('web/img/logoEcurie/' ~ ecurie.logo) }}" alt="{{ ecurie.nomEcurie }}">
+                {% else %}
+                <div class="no-img">NO DATA</div>
+                {% endif %}
+            </td>
+            <td>{{ ecurie.nbTitreEcurie }}</td>
+            <td>
+                <a href="{{ path('app_ecurie_show', {'id': ecurie.id}) }}">show</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_ecurie_edit', {'id': ecurie.id}) }}">edit</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if is_granted('ROLE_ADMIN') %}
+<a class="btn-create" href="{{ path('app_ecurie_new') }}">+ Create new</a>
+{% endif %}
+{% endblock %}

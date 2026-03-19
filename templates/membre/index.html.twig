@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membre index{% endblock %}
+
+{% block body %}
+<h1>Membre index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>Password</th>
+            <th>NomMembre</th>
+            <th>PrenomMembre</th>
+            <th>TelMembre</th>
+            <th>MailMembre</th>
+            <th>RueMembre</th>
+            <th>CpMembre</th>
+            <th>VilleMembre</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for membre in membres %}
+        <tr>
+            <td>{{ membre.id }}</td>
+            <td>{{ membre.username }}</td>
+            <td>{{ membre.roles ? membre.roles|json_encode : '' }}</td>
+            <td>{{ membre.password }}</td>
+            <td>{{ membre.nomMembre }}</td>
+            <td>{{ membre.prenomMembre }}</td>
+            <td>{{ membre.telMembre }}</td>
+            <td>{{ membre.mailMembre }}</td>
+            <td>{{ membre.rueMembre }}</td>
+            <td>{{ membre.cpMembre }}</td>
+            <td>{{ membre.villeMembre }}</td>
+            <td>
+                <a href="{{ path('app_membre_show', {'id': membre.id}) }}">show</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_membre_edit', {'id': membre.id}) }}">edit</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="12">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_granted('ROLE_ADMIN') %}
+<a class="btn-create" href="{{ path('app_membre_new') }}">+ Create new</a>
+{% endif %}
+{% endblock %}

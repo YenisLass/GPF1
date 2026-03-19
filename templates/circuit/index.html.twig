@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Circuits{% endblock %}
+
+{% block body %}
+    <h1>Circuits</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomCircuit</th>
+                <th>Lieu</th>
+                <th>Nombre de tour</th>
+                <th>Distance du circuit</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for circuit in circuits %}
+            <tr>
+                <td>{{ circuit.id }}</td>
+                <td>{{ circuit.nomCircuit }}</td>
+                <td>{{ circuit.lieu }}</td>
+                <td>{{ circuit.nbTour }}</td>
+                <td>{{ circuit.distanceCircuit }}</td>
+                <td>
+                    <a href="{{ path('app_circuit_show', {'id': circuit.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_circuit_edit', {'id': circuit.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% if is_granted('ROLE_ADMIN') %}
+        <a class="btn-create" href="{{ path('app_circuit_new') }}">+ Create new</a>
+    {% endif %}
+{% endblock %}

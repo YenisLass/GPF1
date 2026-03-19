@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Ecurie{% endblock %}
+
+{% block body %}
+<h1>Create new Ecurie</h1>
+
+{{ include('ecurie/_form.html.twig') }}
+
+<a class="btn-back" href="{{ path('app_ecurie_index') }}">← Back to list</a>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membre{% endblock %}
+
+{% block body %}
+    <h1>Membre</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ membre.id }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ membre.username }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ membre.roles ? membre.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ membre.password }}</td>
+            </tr>
+            <tr>
+                <th>NomMembre</th>
+                <td>{{ membre.nomMembre }}</td>
+            </tr>
+            <tr>
+                <th>PrenomMembre</th>
+                <td>{{ membre.prenomMembre }}</td>
+            </tr>
+            <tr>
+                <th>TelMembre</th>
+                <td>{{ membre.telMembre }}</td>
+            </tr>
+            <tr>
+                <th>MailMembre</th>
+                <td>{{ membre.mailMembre }}</td>
+            </tr>
+            <tr>
+                <th>RueMembre</th>
+                <td>{{ membre.rueMembre }}</td>
+            </tr>
+            <tr>
+                <th>CpMembre</th>
+                <td>{{ membre.cpMembre }}</td>
+            </tr>
+            <tr>
+                <th>VilleMembre</th>
+                <td>{{ membre.villeMembre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+<div class="action-buttons">
+    <a class="btn-back" href="{{ path('app_membre_index') }}">← Back to list</a>
+    {% if is_granted('ROLE_ADMIN') %}
+    <a class="btn-edit" href="{{ path('app_membre_edit', {'id': membre.id}) }}">Edit</a>
+    {{ include('membre/_delete_form.html.twig') }}
+    {% endif %}
+</div>
+{% endblock %}

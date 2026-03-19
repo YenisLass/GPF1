@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% block title %}Grand Prix{% endblock %}
+{% block body %}
+<h1>Grands Prix</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date de début</th>
+            <th>Heure de début</th>
+            <th>Heure de fin</th>
+            <th>Circuit</th>
+            <th>Météo</th>
+            <th>Participants</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for grand_prix in grand_prixes %}
+        <tr>
+            <td>{{ grand_prix.id }}</td>
+            <td>{{ grand_prix.dateDebut }}</td>
+            <td>{{ grand_prix.heureDebut }}</td>
+            <td>{{ grand_prix.heureFin }}</td>
+            <td>
+                {% if grand_prix.circuit %}
+                {{ grand_prix.circuit.nomCircuit }}
+                {% else %}
+                Aucun circuit
+                {% endif %}
+            </td>
+            <td>
+                {% if grand_prix.meteo %}
+                {{ grand_prix.meteo.nomMeteo }}
+                {% else %}
+                Aucune météo
+                {% endif %}
+            </td>
+            <td>
+                {% for participant in grand_prix.participant %}
+                {% if participant.ecurie %}
+                {{ participant.ecurie.nomEcurie }}<br>
+                {% endif %}
+                {% else %}
+                Aucun participant
+                {% endfor %}
+            </td>
+            <td>
+                <a href="{{ path('app_grand_prix_show', {'id': grand_prix.id}) }}">show</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_grand_prix_edit', {'id': grand_prix.id}) }}">edit</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="8">no records found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if is_granted('ROLE_ADMIN') %}
+<a class="btn-create" href="{{ path('app_grand_prix_new') }}">+ Create new</a>
+{% endif %}
+{% endblock %}

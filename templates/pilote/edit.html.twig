@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Pilote{% endblock %}
+
+{% block body %}
+<div class="edit-wrapper">
+    <h1>Edit Pilote</h1>
+    {{ include('pilote/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="action-buttons" style="margin-top: 1.5rem;">
+        <a class="btn-back" href="{{ path('app_pilote_index') }}">← Back to list</a>
+        {{ include('pilote/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

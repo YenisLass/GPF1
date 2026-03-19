@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}Pilotes{% endblock %}
+{% block body %}
+    <h1>Pilotes</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom du pilote</th>
+                <th>Prenom du pilote</th>
+                <th>Age</th>
+                <th>Nombre de titre du pilote</th>
+                <th>Écurie</th>
+                <th>Photo du pilote</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pilote in pilotes %}
+            <tr>
+                <td>{{ pilote.id }}</td>
+                <td>{{ pilote.nomPilote }}</td>
+                <td>{{ pilote.prenomPilote }}</td>
+                <td>{{ pilote.age }}</td>
+                <td>{{ pilote.nbTitrePilote }}</td>
+                <td>
+                    {% if pilote.ecurie %}
+                        {{ pilote.ecurie.nomEcurie }}
+                    {% else %}
+                        Aucune écurie
+                    {% endif %}
+                </td>
+                <td>
+                    {% if pilote.imgPilote %}
+                        <img src="{{ asset('web/img/imgPilote/' ~ pilote.imgPilote) }}" alt="{{ pilote.prenomPilote }} {{ pilote.nomPilote }}">
+                    {% else %}
+                        <div class="no-img">NO DATA</div>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_pilote_show', {'id': pilote.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_pilote_edit', {'id': pilote.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="btn-create" href="{{ path('app_pilote_new') }}">+ Create new</a>
+    {% endif %}
+{% endblock %}

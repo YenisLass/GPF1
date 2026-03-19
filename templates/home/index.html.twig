@@ -1,0 +1,209 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GPF1 - Accueil{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* ===== LOGO NÉON ===== */
+    .neon-logo {
+        font-size: 5rem;
+        font-weight: 900;
+        text-align: center !important;
+        display: block;
+        width: 100%;
+        color: #fff;
+        text-shadow:
+            0 0 42px #e50000,
+            0 0 82px #e50000,
+            0 0 92px #e50000;
+        letter-spacing: 0.2em;
+        margin: 3rem auto;
+        animation: flicker 3s infinite alternate;
+    }
+
+    @keyframes flicker {
+        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+            text-shadow:
+                0 0 42px #e50000,
+                0 0 82px #e50000,
+                0 0 92px #e50000;
+        }
+        20%, 24%, 55% { text-shadow: none; }
+    }
+
+    /* ===== CARROUSEL ===== */
+    .carousel-section {
+        max-width: 800px;
+        margin: 2rem auto;
+        text-align: center;
+    }
+
+    .carousel-section h2 {
+        color: #fff;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Conteneur global qui positionne les boutons */
+    .carousel-outer {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Zone qui masque les slides hors champ */
+    .carousel-wrapper {
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease;
+    }
+
+    .carousel-slide {
+        min-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0;
+    }
+
+    .carousel-slide img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    transition: filter 0.3s ease;
+    }
+
+    .carousel-slide img:hover {
+        filter: brightness(1.2);
+    }
+
+    .carousel-slide span {
+        color: #fff;
+        font-weight: bold;
+        font-size: 1.1rem;
+        letter-spacing: 0.05em;
+    }
+
+    /* Boutons OUTSIDE du wrapper overflow:hidden */
+    .carousel-btn {
+        flex-shrink: 0;
+        background: rgba(229, 0, 0, 0.8);
+        border: none;
+        color: #fff;
+        font-size: 2rem;
+        width: 44px;
+        height: 60px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .carousel-btn:hover { background: rgba(229, 0, 0, 1); }
+
+    /* Dots */
+    .carousel-dots {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #555;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .dot.active { background: #e50000; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div style="text-align:center; width:100%;">
+
+    {# ===== LOGO NÉON ===== #}
+    <h1 class="neon-logo">GPF1</h1>
+
+    {# ===== CARROUSEL ÉCURIES ===== #}
+    <div class="carousel-section">
+        <h2>Les Écuries</h2>
+
+        {% if ecuries is not empty %}
+
+        <div class="carousel-outer">
+            <button class="carousel-btn" onclick="changeSlide(-1)">&#8249;</button>
+
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                    {% for ecurie in ecuries %}
+                    <div class="carousel-slide">
+                        <img
+                            src="{{ asset('web/img/logoEcurie/' ~ ecurie.logo) }}"
+                            alt="Logo {{ ecurie.nomEcurie }}"
+                        >
+                        <span>{{ ecurie.nomEcurie }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button class="carousel-btn" onclick="changeSlide(1)">&#8250;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots">
+            {% for ecurie in ecuries %}
+            <div class="dot {% if loop.first %}active{% endif %}" onclick="goToSlide({{ loop.index0 }})"></div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+            <p style="color:#aaa;">Aucune écurie trouvée.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let current = 0;
+        const track = document.getElementById('carouselTrack');
+        const dots = document.querySelectorAll('.dot');
+        const total = {{ ecuries|length }};
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${current * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+        }
+
+        function changeSlide(dir) {
+            current = (current + dir + total) % total;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            current = index;
+            updateCarousel();
+        }
+
+        // Expose aux boutons onclick
+        window.changeSlide = changeSlide;
+        window.goToSlide = goToSlide;
+
+        // Auto-play toutes les 3 secondes
+        setInterval(() => changeSlide(1), 3000);
+    });
+</script>
+{% endblock %}

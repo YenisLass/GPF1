@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GPF1 - Inscription{% endblock %}
+
+{% block body %}
+<div class="edit-wrapper">
+    <h1>Inscription</h1>
+
+    {{ form_start(form) }}
+
+    <div class="form-section-title">Identifiants</div>
+    {{ form_row(form.username) }}
+    {{ form_row(form.plainPassword.first) }}
+    {{ form_row(form.plainPassword.second) }}
+
+    <div class="form-section-title">Informations personnelles</div>
+    {{ form_row(form.nomMembre) }}
+    {{ form_row(form.prenomMembre) }}
+    {{ form_row(form.mailMembre) }}
+    {{ form_row(form.telMembre) }}
+
+    <div class="form-section-title">Adresse</div>
+    {{ form_row(form.rueMembre) }}
+    {{ form_row(form.cpMembre) }}
+    {{ form_row(form.villeMembre) }}
+
+    <button class="btn" type="submit">S'inscrire →</button>
+
+    {{ form_end(form) }}
+
+    <div class="action-buttons" style="margin-top: 1rem;">
+        <a class="btn-back" href="{{ path('app_login') }}">← Déjà un compte ?</a>
+    </div>
+</div>
+{% endblock %}
